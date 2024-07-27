@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "llm-rag"
+version = "0.1.0"
+description = ""
+authors = ["Omar Amer <oamer@keybiz.it>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+langchain-community = "^0.2.10"
+langchain = "^0.2.11"
+pandas = "^2.2.2"
+faiss-cpu = "^1.8.0.post1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
