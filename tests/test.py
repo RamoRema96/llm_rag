@@ -8,19 +8,20 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
+import glob
 
-loader = PyPDFLoader("data/Omar_Amer_cv.pdf")
-pages = loader.load_and_split()
 
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=1000)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=3000, chunk_overlap=500)
 chunks = []
 
-for i, chunk in enumerate(text_splitter.split_text(pages[0].page_content)):
-    chunks.append(
-
-        {"text":chunk,
-         "metadata":pages[0].metadata}
-    )
+pdf_files = glob.glob("data/*.pdf")
+for pdf_file in pdf_files:
+    loader = PyPDFLoader(pdf_file)
+    pages = loader.load_and_split()
+    # Iterate through all pages and split each page's content into chunks
+    for page in pages:
+        for chunk in text_splitter.split_text(page.page_content):
+            chunks.append({"text": chunk, "metadata": page.metadata})
 
 
 private_model = "llama3.1:latest"
@@ -69,7 +70,7 @@ def create_chain(vectorStore):
 chain = create_chain(vectorStore)
 response = chain.invoke(
     {
-        "input": "I need a data scientist, it is Omar Amer suitable?"
+        "input": "I need a data scientist, Which is the most suitable candidate?"
     }
 )
 print(response)
