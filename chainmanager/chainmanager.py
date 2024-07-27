@@ -13,7 +13,7 @@ class ChainManager:
     def create_chain(self):
         llm = Ollama(
             model=self.model_name,
-            callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),
+            #callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),
             temperature=0.4,
         )
         prompt = ChatPromptTemplate.from_template(
@@ -29,6 +29,7 @@ class ChainManager:
             to refer to resumes in your response, otherwise use the name.
             If you don't know the answer, just say that you don't know, do not try to
             make up an answer.
+            In any case, answer precisely to the user question, if he does not ask about candidate explicitely, you don't talk about it
             Context: {context}
             Question: {input}
             """
@@ -43,3 +44,8 @@ class ChainManager:
         chain = self.create_chain()
         response = chain.invoke({"input": query})
         return response
+    
+    def process_chat(self, query):
+        chain = self.create_chain()
+        response = chain.invoke({"input": query})
+        return response["answer"]
