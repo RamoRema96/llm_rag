@@ -10,17 +10,29 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 import glob
 
+import re
+
+def clean_text(text):
+    # Replace multiple newlines and tabs with a single space
+    text = re.sub(r'\s+', ' ', text)
+    # Remove special characters if any
+    text = re.sub(r'[^a-zA-Z0-9\s.,]', '', text)
+    # Remove extra spaces
+    text = re.sub(r'\s{2,}', ' ', text)
+    return text.strip()
+
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=3000, chunk_overlap=500)
 chunks = []
 
-pdf_files = glob.glob("data/*.pdf")
+pdf_files = ["data/Omar_Amer_cv.pdf"]
 for pdf_file in pdf_files:
     loader = PyPDFLoader(pdf_file)
     pages = loader.load_and_split()
     # Iterate through all pages and split each page's content into chunks
     for page in pages:
         for chunk in text_splitter.split_text(page.page_content):
+            chunk = clean_text(chunk)
             chunks.append({"text": chunk, "metadata": page.metadata})
 
 
