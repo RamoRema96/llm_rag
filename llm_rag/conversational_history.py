@@ -1,5 +1,6 @@
 import sys
 import os
+from langchain_core.messages import HumanMessage, AIMessage
 
 # Add the root directory of your project to the Python path
 current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -18,10 +19,14 @@ vector_store_manager.load_vector_store()
 
 # Create the chain manager and process a query
 chain_manager = ChainManager(vector_store_manager)
+chat_history = []
+
 
 while True:
     user_input = input("You: ")
     if user_input.lower()=="exit":
         break
-    response = chain_manager.process_chat(query=user_input)
+    response = chain_manager.process_chat(query=user_input, chat_history=chat_history)
+    chat_history.append(HumanMessage(content=user_input))
+    chat_history.append(AIMessage(content=response))
     print("Assistant:", response)
