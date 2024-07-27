@@ -5,6 +5,7 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 from langchain_core.prompts import MessagesPlaceholder
+from langchain.chains.history_aware_retriever import create_history_aware_retriever
 
 
 class ChainManager:
@@ -58,29 +59,30 @@ class ChainManager:
                 (
                     "system",
                     """
-            You are an expert in talent acquisition that helps determine the best
-            candidate among multiple suitable resumes.
-            Use only the following pieces of context to determine the best resume
-            given a job description.
-            You should provide some detailed explanations for the best resume choice.
-            Make sure to also return a detailed summary of the original text of
-            the best resume.
-            Because there can be applicants with similar names, try to use from the metadata the id
-            to refer to resumes in your response, otherwise use the name.
-            If you don't know the answer, just say that you don't know, do not try to
-            make up an answer.
-            In any case, answer precisely to the user question, if he does not ask about candidate explicitely, you don't talk about it
-            Context: {context}
+            Answer the user questions: {context}
             """,
                 ),
-                MessagesPlaceholder(variable_name="chat_history")
+                MessagesPlaceholder(variable_name="chat_history"),
                 ("human", "{input}"),
             ]
         )
         chain = create_stuff_documents_chain(llm=llm, prompt=prompt)
         vector_store = self.vector_store_manager.get_vector_store()
         retriever = vector_store.as_retriever(search_kwargs={"k": 3})
-        retriever_chain = create_retrieval_chain(retriever, chain)
+        retriever_prompt = ChatPromptTemplate.from_messages(
+            [
+                MessagesPlaceholder(variable_name="chat_history"),
+                ("human", "{input}"),
+                (
+                    "human",
+                    "Given the above conversation, generate a search query to look up in order to get information relevant to the conversation",
+                ),
+            ]
+        )
+        history_aware_retriever = create_history_aware_retriever(
+            llm=llm, retriever=retriever, prompt=retriever_prompt
+        )
+        retriever_chain = create_retrieval_chain(history_aware_retriever, chain)
         return retriever_chain
 
     def process_chat(self, query, chat_history):
