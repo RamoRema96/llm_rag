@@ -67,25 +67,25 @@ This project utilizes language models to build a chatbot with access to the pdf 
 
 1. Clone the repository:
 
-   \`\`\`bash
+   ```bash
    git clone <repository_url>
    cd <repository_directory>
-   \`\`\`
+   ```
 
 2. Install dependencies using Poetry:
 
-   \`\`\`bash
+   ```bash
    poetry install
-   \`\`\`
+   ```
 
 ### Running the Project
 
 1. Navigate to the \`llm_rag\` directory and run the main script:
 
-   \`\`\`bash
+   ```bash
    cd llm_rag
    poetry run python main.py
-   \`\`\`
+   ```
 
 2. Interact with the system via the command line. To exit the interactive loop, type \`exit\`.
 
@@ -121,23 +121,23 @@ To build and run the project using Docker, follow these steps:
 
 1. Build the Docker image:
 
-   \`\`\`bash
+   ```bash
    docker build -t project-image .
-   \`\`\`
+   ```
 
 2. Run the Docker container:
 
-   \`\`\`bash
+   ```bash
    docker run -it project-image
-   \`\`\`
+   ```
 
 ## Testing
 
 Tests are located in the \`tests\` directory. To run the tests, use the following command:
 
-\`\`\`bash
+```bash
 poetry run pytest
-\`\`\`
+```
 
 ## License
 
