@@ -6,6 +6,22 @@ from langchain_community.vectorstores.faiss import FAISS
 import os
 from utils import clean_text
 class VectorStoreManager:
+    """
+    VectorStoreManager handles loading, splitting, and managing vector stores for document embeddings.
+
+    Attributes:
+        pdf_directory (str): Directory containing PDF files to be processed.
+        model_name (str): The name of the model to be used for embeddings.
+        save_path (str): Path to save the vector store.
+        vector_store (FAISS): The vector store instance.
+        text_splitter (RecursiveCharacterTextSplitter): An instance of RecursiveCharacterTextSplitter for splitting text.
+
+    Methods:
+        load_and_split_pdfs(): Loads and splits PDF files into text chunks.
+        create_vector_store(chunks: list): Creates a vector store from text chunks.
+        load_vector_store(): Loads an existing vector store or creates a new one if it doesn't exist.
+        get_vector_store(): Retrieves the vector store.
+    """
     def __init__(self, pdf_directory=None, model_name="llama3.1:latest", save_path=None, text_splitter=RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=500)):
         self.pdf_directory = pdf_directory
         self.model_name = model_name

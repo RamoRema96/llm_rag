@@ -6,14 +6,31 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 from langchain_core.prompts import MessagesPlaceholder
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
+from vectorstoremanager.vectorstoremanager import VectorStoreManager
 
 
 class ChainManager:
-    def __init__(self, vector_store_manager, model_name="llama3.1:latest"):
+    """
+    ChainManager is responsible for creating and managing chains for processing queries
+    using a language model.
+
+    Attributes:
+        vector_store_manager (VectorStoreManager): An instance of VectorStoreManager to handle vector store operations.
+        model_name (str): The name of the model to be used.
+
+    Methods:
+        create_chain(): Creates a retrieval chain for selecting the best resume based on a job description.
+        process_query(query: str): Processes a query to determine the best resume.
+        create_chain_conversational(): Creates a conversational chain for answering physics-related questions.
+        process_chat(query: str, chat_history: list): Processes a conversational query with chat history.
+    """
+
+    def __init__(self, vector_store_manager:VectorStoreManager, model_name="llama3.1:latest"):
         self.vector_store_manager = vector_store_manager
         self.model_name = model_name
 
     def create_chain(self):
+        
         llm = Ollama(
             model=self.model_name,
             # callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),
