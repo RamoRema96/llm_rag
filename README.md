@@ -83,8 +83,9 @@ This project utilizes language models to build a chatbot with access to the pdf 
 1. Navigate to the \`llm_rag\` directory and run the main script:
 
    ```bash
+   poetry shell
    cd llm_rag
-   poetry run python main.py
+   poetry run python conversational_history.py
    ```
 
 2. Interact with the system via the command line. To exit the interactive loop, type \`exit\`.
