@@ -1,5 +1,5 @@
 # First stage: setup environment and pull models
-FROM python:3.11-slim as builder
+FROM python:3.11-slim 
 
 # Install Poetry
 RUN pip install poetry
@@ -23,32 +23,15 @@ RUN /usr/local/bin/start_ollama.sh & \
     /usr/local/bin/wait_for_ollama.sh && \
     ollama pull llama3.1:latest
 
-# Second stage: setup final environment
-FROM python:3.11-slim
+COPY . /app
 
-# Install Poetry
-RUN pip install poetry
+WORKDIR /app
 
-# Update and install curl
-RUN apt-get update && apt-get install -y curl
+RUN poetry install
+RUN chmod +x run_ollama.sh
+CMD [ "sh", "run_ollama.sh" ]
 
-# Install ollama
-RUN curl -fsSL https://ollama.com/install.sh | sh
-
-# Copy the pulled models from the builder stage
-COPY --from=builder /root/.ollama /root/.ollama
-
-# Copy the start_ollama.sh script into the container
-COPY start_ollama.sh /usr/local/bin/start_ollama.sh
-COPY wait_for_ollama.sh /usr/local/bin/wait_for_ollama.sh
-
-# Make the script executable
-RUN /usr/local/bin/start_ollama.sh & \
-/usr/local/bin/wait_for_ollama.sh
-
-# Set the script as the default command
-#CMD ["/usr/local/bin/start_ollama.sh"]
-
+#RUN run_ollama.sh
 
 
 # CMD bash -c "\
