@@ -30,7 +30,7 @@ class ChainManager:
         self.model_name = model_name
 
     def create_chain(self):
-        
+        #TODO The prompt should be passed outside
         llm = Ollama(
             model=self.model_name,
             # callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),
@@ -66,6 +66,7 @@ class ChainManager:
         return response
 
     def create_chain_conversational(self):
+        #TODO the propmpt should be passed outside
         llm = Ollama(
             model=self.model_name,
             # callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),

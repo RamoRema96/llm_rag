@@ -50,6 +50,7 @@ class VectorStoreManager:
             self.vector_store.save_local(self.save_path)
 
     def load_vector_store(self):
+        #FIXME Instead of save the db as an attribute, it should return it as a variable
         embedding = OllamaEmbeddings(model=self.model_name)
         if self.save_path and os.path.exists(self.save_path):
             self.vector_store = FAISS.load_local(self.save_path, embeddings=embedding, allow_dangerous_deserialization=True)
