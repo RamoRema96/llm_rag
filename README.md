@@ -1,0 +1,1 @@
+Once inside the image run the command run_ollama.sh. In this way ollama will start and you can use it

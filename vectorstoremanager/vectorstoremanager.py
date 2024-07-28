@@ -6,7 +6,7 @@ from langchain_community.vectorstores.faiss import FAISS
 import os
 from utils import clean_text
 class VectorStoreManager:
-    def __init__(self, pdf_directory=None, model_name="llama3.1:latest", save_path=None, text_splitter=RecursiveCharacterTextSplitter(chunk_size=3000, chunk_overlap=500)):
+    def __init__(self, pdf_directory=None, model_name="llama3.1:latest", save_path=None, text_splitter=RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=500)):
         self.pdf_directory = pdf_directory
         self.model_name = model_name
         self.save_path = save_path

@@ -10,15 +10,16 @@ sys.path.append(parent_dir)
 from chainmanager.chainmanager import ChainManager
 from vectorstoremanager.vectorstoremanager import VectorStoreManager
 
-pdf_directory="data"
-save_path = "vector_store_cvs.faiss"
+pdf_directory="book"
+save_path = "itps.faiss"
+model_name = "llama3.1:latest"
 
 # Create and/or load the vector store
-vector_store_manager = VectorStoreManager(pdf_directory=pdf_directory, save_path=save_path)
+vector_store_manager = VectorStoreManager(pdf_directory=pdf_directory, save_path=save_path, model_name=model_name)
 vector_store_manager.load_vector_store()
-
+print("Vector store loaded or created")
 # Create the chain manager and process a query
-chain_manager = ChainManager(vector_store_manager)
+chain_manager = ChainManager(vector_store_manager, model_name=model_name)
 chat_history = []
 
 

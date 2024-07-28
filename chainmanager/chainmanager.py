@@ -59,7 +59,8 @@ class ChainManager:
                 (
                     "system",
                     """
-            Answer the user questions: {context}
+            You are one of the best Physics professor of University at
+            La Sapienza. You are teaching the course base on the book at the university. Answer to the students questions, they are also physicist at the 4 year: {context}
             """,
                 ),
                 MessagesPlaceholder(variable_name="chat_history"),
